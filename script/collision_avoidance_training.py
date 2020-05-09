@@ -181,7 +181,10 @@ class IgnisBotCollisionAvoidance(object):
         return info
 
     def start_dataget_collision_avoidance(self):
+        rospy.loginfo("begin start_dataget_collision_avoidance")
         self.init_start_data_collection()
+        rospy.loginfo("after init_start_data_collection")
+        rospy.loginfo(self._simulated_camera)
         if not self._simulated_camera:
             self.start_collision_avoidance_data_collection()
         else:
