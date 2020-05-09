@@ -58,11 +58,17 @@ class IgnisBotCollisionAvoidance(object):
 
 
     def start_camera_servo(self):
+        rospy.loginfo("Begin init_start_camera_servo")
         # Movement Topics publishers
         self.camera_pan_publisher_topic_name = "/jetdog/camera_tilt_joint_position_controller/command"
         self.camera_tilt_pub = rospy.Publisher(self.camera_pan_publisher_topic_name, Float64, queue_size=1)
+        rospy.loginfo("Before _check_pub_connection")
         self._check_pub_connection(self.camera_tilt_pub)
+        rospy.loginfo("After _check_pub_connection")
+        rospy.loginfo("Before reset_camera_pan")
         self.reset_camera_pan()
+        rospy.loginfo("After reset_camera_pan")
+        rospy.loginfo("End init_start_camera_servo")
 
     def reset_camera_pan(self):
         """
