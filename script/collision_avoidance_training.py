@@ -11,7 +11,7 @@ import numpy as np
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Image
 # Fix to avoid bug that ros kinetic has
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+#sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 import cv2
 
 
