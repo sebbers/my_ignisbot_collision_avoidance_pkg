@@ -45,6 +45,8 @@ class IgnisBotCollisionAvoidance(object):
     def _check_pub_connection(self, publisher_object):
 
         rate = rospy.Rate(10)  # 10hz
+        rospy.loginfo("Inside _check_pub_connection")
+        rospy.loginfo(publisher_object)
         while publisher_object.get_num_connections() == 0 and not rospy.is_shutdown():
             rospy.logdebug("No susbribers to publisher_object yet so we wait and try again")
             try:
