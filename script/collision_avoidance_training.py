@@ -40,8 +40,8 @@ class IgnisBotCollisionAvoidance(object):
         self.free_dir = os.path.join(self.collision_avoidance_pkg_path,'dataset/free')
 
         rospy.loginfo("Init IgnisBotCollisionAvoidance done...")
-        
-    
+
+
     def _check_pub_connection(self, publisher_object):
 
         rate = rospy.Rate(10)  # 10hz
@@ -101,13 +101,13 @@ class IgnisBotCollisionAvoidance(object):
             print(e)
 
     def init_start_data_collection(self):
-
+        rospy.loginfo("Begin init_start_data_collection")
         self.start_camera_servo()
 
+        rospy.loginfo("Starting collision_avoidance_datacollection service")
         s = rospy.Service('/ignisbot/collision_avoidance_datacollection', SetBool, self.handle_ca_signal)
 
         if self._simulated_camera:
-
             rospy.logwarn("Simulated Camera")
             from cv_bridge import CvBridge, CvBridgeError
 
@@ -117,14 +117,18 @@ class IgnisBotCollisionAvoidance(object):
             self.image_sub = rospy.Subscriber(self._camera_topic,Image,self.camera_callback)
 
         else:
+            rospy.loginfo("Its the physical robot")
             # Its the physical robot
             # TODO: This has to be tested and debuged
             if self._csi_camera:
+                rospy.loginfo("CSICamera")
                 from jetcam.csi_camera import CSICamera
                 self.camera = CSICamera(width=self.WIDTH, height=self.HEIGHT, capture_fps=30)
             else:
+                rospy.loginfo("USBCamera")
                 from jetcam.usb_camera import USBCamera
                 self.camera = USBCamera(width=self.WIDTH, height=self.HEIGHT, capture_fps=30)
+            rospy.loginfo(self.camera)
 
         # we have this "try/except" statement because these next functions can throw an error if the directories exist already
         try:
@@ -143,12 +147,12 @@ class IgnisBotCollisionAvoidance(object):
     def execute_datacolection(self, change):
         # We update cv_image with the latest image value
         self.cv_image = change['new']
-        
+
 
     def save_snapshot(self, directory):
         image_path = os.path.join(directory, str(uuid1()) + '.jpg')
         with open(image_path, 'wb') as f:
-            cv2.imwrite(image_path, self.cv_image)            
+            cv2.imwrite(image_path, self.cv_image)
 
         return image_path
 
@@ -163,7 +167,7 @@ class IgnisBotCollisionAvoidance(object):
         info = self.save_snapshot(self.blocked_dir)
         self.block_count = len(os.listdir(self.blocked_dir))
         return info
-    
+
     def start_dataget_collision_avoidance(self):
         self.init_start_data_collection()
         if not self._simulated_camera:
@@ -195,4 +199,3 @@ if __name__ == "__main__":
             ca_object.start_dataget_collision_avoidance()
         else:
             pass
-
