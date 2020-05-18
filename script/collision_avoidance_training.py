@@ -52,7 +52,7 @@ class IgnisBotCollisionAvoidance(object):
 
         rospy.loginfo("Before loop")
         while publisher_object.get_num_connections() == 0 and not rospy.is_shutdown():
-            ospy.loginfo("Inside loop")
+            rospy.loginfo("Inside loop")
             rospy.logdebug("No susbribers to publisher_object yet so we wait and try again")
             try:
                 rate.sleep()
